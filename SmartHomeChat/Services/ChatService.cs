@@ -34,12 +34,11 @@ public class ChatService
 
         // Add a plugin (the LightsPlugin class is defined below)
         _kernel.Plugins.AddFromType<LightsPlugin>("Lights");
+        _kernel.Plugins.AddFromType<FansPlugin>("FansPlugin");
         _kernel.Plugins.AddFromType<AirConsPlugin>("AirCons");
 
         chatHistory = new ChatHistory();
     }
-
-
 
     public async Task<string> Ask(string message)
     {
@@ -50,14 +49,16 @@ public class ChatService
         };
 
         // Create a history store the conversation
-        var history = new ChatHistory();
-        history.AddUserMessage(message);
+        chatHistory!.AddUserMessage(message);
+
+        // Print the request
+        Console.WriteLine("You > " + message);
 
         var chatCompletionService = _kernel.GetRequiredService<IChatCompletionService>();
 
         // Get the response from the AI
         var result = await chatCompletionService.GetChatMessageContentAsync(
-           history,
+           chatHistory,
            executionSettings: openAIPromptExecutionSettings,
            kernel: _kernel);
 
@@ -65,7 +66,7 @@ public class ChatService
         Console.WriteLine("Assistant > " + result);
 
         // Add the message from the agent to the chat history
-        history.AddAssistantMessage(result.ToString());
+        chatHistory.AddAssistantMessage(result.ToString());
 
         return result.ToString();
     }

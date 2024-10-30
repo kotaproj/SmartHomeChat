@@ -30,6 +30,24 @@
     .message p, .message ul, .message ol {
         font-size: 12px;
     }
+
+    .input-text {
+        width: 80%; /* 幅を広げる */
+        height: 40px; /* 高さを調整 */
+        font-size: 16px; /* 文字サイズを大きくする */
+        padding: 10px; /* 内側の余白を追加 */
+        box-sizing: border-box; /* パディングを含めて幅を計算 */
+    }
+
+    .chat-input {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* ボタンとの隙間を追加 */
+    }
+
+    .send-button {
+        height: 40px; /* ボタンの高さをinputに合わせる */
+    }
 </style>
 
 
@@ -65,7 +83,6 @@
 
             var markdownResponse = MarkdownHelper.RenderMarkdown(response);
             _messages.Add($"ChatGPT: {markdownResponse}");
-            // _messages.Add($"ChatGPT: {response}");
             _userInput = "";
             StateHasChanged();
         }
