@@ -1,0 +1,73 @@
+﻿@page "/"
+@page "/chat"
+@using SmartHomeChat.Services
+@using SmartHomeChat.Helper
+@rendermode InteractiveServer
+@inject ChatService chatService;
+
+<PageTitle>Chat</PageTitle>
+
+<style>
+    .message {
+        font-size: 12px; /* 文字サイズを小さく調整 */
+        line-height: 1.5; /* 行間の調整 */
+    }
+
+    /* Markdownの見出し（h1, h2, etc.）のサイズも調整可能 */
+    .message h1 {
+        font-size: 16px;
+    }
+
+    .message h2 {
+        font-size: 15px;
+    }
+
+    .message h3 {
+        font-size: 13px;
+    }
+
+    /* リストや段落の調整 */
+    .message p, .message ul, .message ol {
+        font-size: 12px;
+    }
+</style>
+
+
+
+<div class="chat-messages">
+    @if (_messages != null)
+    {
+        <div>
+            @foreach (var message in _messages)
+            {
+                <div class="message">@((MarkupString)message)</div>
+                <hr>
+            }
+        </div>
+    }
+</div>
+
+<div class="chat-input">
+    <input @bind="_userInput" class="input-text" placeholder="Type your message here..." />
+    <button @onclick="SendQuery" class="send-button">Send</button>
+</div>
+
+@code {
+    private string _userInput = string.Empty;
+    private List<string> _messages = new();
+
+    private async Task SendQuery()
+    {
+        if (!string.IsNullOrWhiteSpace(_userInput))
+        {
+            _messages.Add($"You: {_userInput}");
+            var response = await chatService.Ask(_userInput);
+
+            var markdownResponse = MarkdownHelper.RenderMarkdown(response);
+            _messages.Add($"ChatGPT: {markdownResponse}");
+            // _messages.Add($"ChatGPT: {response}");
+            _userInput = "";
+            StateHasChanged();
+        }
+    }
+}

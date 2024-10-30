@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>0a6546bc-3d2b-4157-90fe-0ce9a78320ae</UserSecretsId>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Markdig" Version="0.38.0" />
+		<PackageReference Include="Microsoft.SemanticKernel" Version="1.25.0" />
+	</ItemGroup>
+</Project>
